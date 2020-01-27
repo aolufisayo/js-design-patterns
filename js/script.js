@@ -1,7 +1,4 @@
-var com = com || {};
-com.phissy = com.phissy || {};
-com.phissy.jsdp = com.phissy.jsdp || {}
-com.phissy.jsdp.sudoChat = {
+var o = {
 	leadself: 'Me: ',
 	leadcomputer: "PC: ",
 	aSaid: ["This is a Cyber Chat"],
