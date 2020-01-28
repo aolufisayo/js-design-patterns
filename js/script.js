@@ -1,43 +1,50 @@
-var sudoChat = (function () {
-	var _leadself = 'Me: ';
-	var _leadcomputer = "PC: ";
-	var _aSaid = ["This is a Cyber Chat"];
-	var _msgYes = "Yes, that's a great idea.";
-	var _msgNo = "No, that must be a mistake.";
-	var _aSassyStuff = ["Like mold on books, grow myths on history.",
-		"She moved like a poem and smiled like a sphinx.",
-		"As long as we don’t die, this is gonna be one hell of a story.",
-		"She laughed, and the desert sang.",
-		"You’ve got about as much charm as a dead slug."];
+(function (win, $) {
+	var CircleGeneratorSingleton = (function () {
+		var instance;
+		function init() {
+			var _aCircle = [];
+			var _stage = $('.advert')
 
-	var _echo = function (msg) {
-		_aSaid.push("<div>" + msg + "</div>");
-		var asaidLength = _aSaid.length;
-		var start = Math.max(asaidLength - 6, 0);
-		out = "";
-		for (var i = start; i < asaidLength; i++) {
-			out += _aSaid[i]
+			function _position(circle, top, left) {
+				circle.css('top', top);
+				circle.css('left', left);
+			};
+			function create(top, left) {
+				var circle = $('<div class="circle"></div>');
+				_position(circle, top, left)
+				return circle;
+			};
+			function add(circle) {
+				_stage.append(circle)
+				_aCircle.push(circle);
+			};
+			function index() {
+				return _aCircle.length;
+			};
+
+			return {
+				index: index,
+				create: create,
+				add: add
+			}
+
 		}
-		$(".advert").html(out)
-		$("#talk span").text(msg)
-	};
-	var talk = function (msg) {
-		_echo(_leadself + msg)
-	};
-	var replyYesNo = function () {
-		var msg = Math.random() > .5 ? _msgYes : _msgNo;
-		_echo(_leadcomputer + msg)
-	};
+		return {
+			getInstance: function () {
+				if (!instance) {
+					instance = init();
+				}
+				return instance;
+			}
+		}
+	})()
+	$(win.document).ready(function () {
+		$('.advert').click(function (e) {
+			var cg = CircleGeneratorSingleton.getInstance();
+			var circle = cg.create(e.pageY - 25, e.pageX - 25)
+			cg.add(circle);
 
-	var saySassyStuff = function () {
-		var msg = _aSassyStuff[Math.floor(Math.random() * _aSassyStuff.length)];
-		_echo(_leadcomputer + msg)
-	};
+		})
 
-	return {
-		talk: talk,
-		replyYesNo: replyYesNo,
-		saySassyStuff: saySassyStuff
-	}
-
-})()
+	})
+})(window, jQuery)
